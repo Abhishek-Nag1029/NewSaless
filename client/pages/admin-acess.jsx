@@ -4,7 +4,7 @@ import { useRouter } from "next/router"; // Corrected from 'next/navigation' to 
 import "./globals.css";
 import eye from "../assets/eye.png";
 
-const admin_access = () => {
+const AdminAccess = () => {
   const [inpData, setInpData] = useState({
     email: "",
     password: "",
@@ -95,4 +95,4 @@ const admin_access = () => {
   );
 };
 
-export default admin_access;
+export default AdminAccess;
