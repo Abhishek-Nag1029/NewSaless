@@ -106,7 +106,7 @@ const Candidates = () => {
             </thead>
             <tbody>
                 {
-                    currentItems.map((item, i) => <tr className="bg-slate-800 text-slate-400 p-2 text-center hover:bg-slate-900 hover:text-white cursor-pointer border-b-2 border-slate-600  ">
+                    currentItems.map((item, i) => <tr key={item.id} className="bg-slate-800 text-slate-400 p-2 text-center hover:bg-slate-900 hover:text-white cursor-pointer border-b-2 border-slate-600  ">
                         <td>{i + 1}</td>
                         <td>{item.firstName} {item.lastName}</td>
                         <td>{item.email}</td>
