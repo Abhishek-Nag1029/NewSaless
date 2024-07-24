@@ -2,7 +2,7 @@
 import axios from 'axios';
 import React, { useState } from 'react'
 
-const page = () => {
+const Page = () => {
     const [data, setData] = useState([])
     const [value, setValue] = useState()
     const totalSalesDataOfEmployee = async (id) => {
@@ -34,4 +34,4 @@ const page = () => {
     </>
 }
 
-export default page
+export default Page

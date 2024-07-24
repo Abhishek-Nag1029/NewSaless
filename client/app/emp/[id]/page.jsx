@@ -1,5 +1,5 @@
 "use client"
-import { data, options } from '@/pages/linechart'
+import { data, options } from '@/Pages/linechart'
 import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
@@ -19,7 +19,7 @@ import { useSelector } from 'react-redux';
 import CustomerTable from "../../../components/CustomerTable"
 
 //Home Page
-const page = ({ params }) => {
+const Page = ({ params }) => {
   const [filter, setFilter] = useState('all');
   const [active, setActive] = useState("Email")
   const [employees, setEmployees] = useState([])
@@ -152,11 +152,11 @@ const page = ({ params }) => {
 
   const handleGoToPage = (e) => {
     e.preventDefault(); // Prevent the default form submit action
-    let pageNumber = parseInt(goToPage, 10);
-    if (!isNaN(pageNumber)) {
-      pageNumber = Math.max(1, pageNumber); // Minimum page number should be 1
-      pageNumber = Math.min(pageNumber, totalPages); // Maximum is the totalPages
-      setCurrentPage(pageNumber);
+    let PageNumber = parseInt(goToPage, 10);
+    if (!isNaN(PageNumber)) {
+      PageNumber = Math.max(1, PageNumber); // Minimum Page number should be 1
+      PageNumber = Math.min(PageNumber, totalPages); // Maximum is the totalPages
+      setCurrentPage(PageNumber);
     }
     setGoToPage(''); // Optionally clear the input after jump
   };
@@ -598,4 +598,4 @@ const page = ({ params }) => {
 
 
 
-export default page
+export default Page

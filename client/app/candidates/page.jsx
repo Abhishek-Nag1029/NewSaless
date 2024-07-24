@@ -1,11 +1,10 @@
 import Candidates from '@/components/Candidates'
 import React from 'react'
 
-const page = () => {
+const Page = () => {
     return <>
         <Candidates />
-
     </>
 }
 
-export default page
+export default Page
