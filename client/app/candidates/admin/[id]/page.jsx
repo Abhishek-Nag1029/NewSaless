@@ -103,49 +103,48 @@ const Candidates = () => {
                 </tr>
             </thead>
             <tbody>
-                {
-                    currentItems.map((item, i) => <tr className="bg-slate-800 text-slate-400 p-2 text-center hover:bg-slate-900 hover:text-white cursor-pointer border-b-2 border-slate-600  ">
-                        <td>{i + 1}</td>
-                        <td>{item.firstName} {item.lastName}</td>
-                        <td>{item.email}</td>
-                        <td className="w-full">{item.phone}</td>
-                        <td className="text-xs">{item.college}</td>
-                        <td>{item.state}</td>
-                        <td>{item.degree} {item.branch} {item.passingYear}</td>
-                        <td >
-                            {item.status}
-                        </td>
-                        <td className="pt-2 ">
-                            <textarea className=" resize-none p-2 text-slate-200 bg-slate-700 rounded-sm focus:outline-none cursor-pointer" name="" id="" cols="25" rows="4" readOnly>
-                                {item.message}
-                            </textarea>
-                        </td>
-                        <td>
-                            <button
-                                data-bs-toggle="modal" data-bs-target="#exampleModal"
-                                onClick={() => setCandidateId(item._id)}
-                                className="bg-green-600 text-white px-3 py-1 ">Edit</button>
-                        </td>
-                        <td>
-                            <Link href={{
-                                pathname: `/candidates/${item._id}`
-
-                            }}>
-                                <button
-                                    className='py-1 px-3  mx-2 bg-blue-600 text-slate-50 '>View
-                                </button>
-                            </Link>
-                        </td>
-
-                        <td>
-                            <button
-                                onClick={e => setUserId(`${item._id}`)}
-                                className="bg-green-900 text-white px-3 py-1 ">Mail</button>
-                        </td>
-                    </tr>)
-                }
-
-            </tbody>
+    {
+        currentItems.map((item, i) => (
+            <tr key={item._id} className="bg-slate-800 text-slate-400 p-2 text-center hover:bg-slate-900 hover:text-white cursor-pointer border-b-2 border-slate-600">
+                <td>{i + 1}</td>
+                <td>{item.firstName} {item.lastName}</td>
+                <td>{item.email}</td>
+                <td className="w-full">{item.phone}</td>
+                <td className="text-xs">{item.college}</td>
+                <td>{item.state}</td>
+                <td>{item.degree} {item.branch} {item.passingYear}</td>
+                <td>
+                    {item.status}
+                </td>
+                <td className="pt-2">
+                    <textarea className="resize-none p-2 text-slate-200 bg-slate-700 rounded-sm focus:outline-none cursor-pointer" name="" id="" cols="25" rows="4" readOnly>
+                        {item.message}
+                    </textarea>
+                </td>
+                <td>
+                    <button
+                        data-bs-toggle="modal" data-bs-target="#exampleModal"
+                        onClick={() => setCandidateId(item._id)}
+                        className="bg-green-600 text-white px-3 py-1">Edit</button>
+                </td>
+                <td>
+                    <Link href={{
+                        pathname: `/candidates/${item._id}`
+                    }}>
+                        <button
+                            className='py-1 px-3 mx-2 bg-blue-600 text-slate-50'>View
+                        </button>
+                    </Link>
+                </td>
+                <td>
+                    <button
+                        onClick={e => setUserId(`${item._id}`)}
+                        className="bg-green-900 text-white px-3 py-1">Mail</button>
+                </td>
+            </tr>
+        ))
+    }
+</tbody>
         </table>
     </div>
 
