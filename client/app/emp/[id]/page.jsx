@@ -1,5 +1,5 @@
 "use client"
-import { data, options } from '@/Pages/linechart'
+import { data, options } from '@/pages/linechart'
 import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
