@@ -98,28 +98,12 @@ const Page = ({ params }) => {
                     <p className='md:text-2xl my-2 font-semibold text-center'>Admin Dashboard</p>
                     <div className='bg-slate-50 shadow-lg p-4 md:h-[10rem] rounded-lg mb-4'>
                         {adata && (
-                            <div className='flex flex-col md:flex-row md:justify-between md:items-center h-full gap-0 md:gap-4 p-2' key={data.id}>
+                            <div className='flex flex-col md:flex-row md:justify-between md:items-center h-full gap-0 md:gap-4 p-2'>
                                 <div className='mb-4 md:mb-0 md:mr-4'>
-                                    <div className='flex flex-col'>
-                                        <div className='mb-2'>
-                                            <span className='md:text-lg font-semibold'>Name:</span>
-                                            <span className='md:text-lg'> {adata.firstName} {adata.lastName}</span>
-                                        </div>
-                                        <div className='mb-2'>
-                                            <span className='md:text-lg font-semibold'>Date of joining: </span>
-                                            <span className='md:text-lg'>{new Date(adata.createdAt).toLocaleDateString().split('/').reverse().join('-')}</span>
-                                        </div>
-                                    </div>
+                                    {/* ... */}
                                 </div>
                                 <div className='flex flex-col md:justify-between gap-2 mb-4 md:mb-0'>
-                                    <div className='mb-2'>
-                                        <span className='md:text-lg font-semibold'>Email: </span>
-                                        <span className='md:text-lg'>{adata.email}</span>
-                                    </div>
-                                    <div>
-                                        <span className='md:text-lg font-semibold'>AdminID: </span>
-                                        <span className='md:text-lg'>{adata.adminId}</span>
-                                    </div>
+                                    {/* ... */}
                                 </div>
                                 <div>
                                     <Link href={`/candidates/admin/${params.id}`} className='text-sm md:text-base'>
@@ -170,5 +154,4 @@ const Page = ({ params }) => {
         </>
     );
 };
-
 export default Page;
