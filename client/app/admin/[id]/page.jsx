@@ -52,30 +52,40 @@ const Page = ({ params }) => {
         }
     };
 
-    const socket = useMemo(() => io("http://localhost:3000"), []);
+    const socket = useMemo(() => {
+        if (typeof window !== 'undefined') {
+            return io("http://localhost:3000");
+        }
+    }, []);
     const adminId = params.id;
 
     const fetchAdminData = (id) => {
-        socket.emit('getAdmin', id);
+        if (typeof window !== 'undefined' && socket) {
+            socket.emit('getAdmin', id);
+        }
     };
 
     useEffect(() => {
-        socket.on('adminResponse', (response) => {
-            if (response.error) {
-                toast.error(`Error: ${response.message}`);
-            } else {
-                setBackData([response.data]);
+        if (typeof window !== 'undefined' && socket) {
+            socket.on('adminResponse', (response) => {
+                if (response.error) {
+                    toast.error(`Error: ${response.message}`);
+                } else {
+                    setBackData([response.data]);
+                }
+            });
+
+            if (adminId) {
+                fetchAdminData(adminId);
             }
-        });
 
-        if (adminId) {
-            fetchAdminData(adminId);
+            return () => {
+                if (socket) {
+                    socket.off('adminResponse');
+                }
+            };
         }
-
-        return () => {
-            socket.off('adminResponse');
-        };
-    }, [adminId, updateAdminEmail]);
+    }, [adminId, socket, updateAdminEmail]);
 
     useEffect(() => {
         if (isError && (error?.status === 401 || error?.status === 403)) {
