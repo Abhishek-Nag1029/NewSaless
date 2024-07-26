@@ -1,3 +1,5 @@
+"use client"; // Add this line at the top
+
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 
