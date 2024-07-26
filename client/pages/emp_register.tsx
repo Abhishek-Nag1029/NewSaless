@@ -185,7 +185,8 @@ const Register: React.FC = () => {
 
           {/* Right Side: Random Text */}
           <div className="flex-1 bg-gray-200 p-6 rounded-md flex flex-col justify-center items-center">
-            <h2 className="text-xl font-semibold mb-4">Employee's Details</h2>
+          <h2 className="text-xl font-semibold mb-4">Employee&apos;s Details</h2>
+
             <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut arcu eu erat tincidunt fermentum.
               Integer ullamcorper urna eu augue laoreet, non tincidunt velit tempus. Donec euismod tincidunt libero,
