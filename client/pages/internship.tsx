@@ -34,8 +34,9 @@ const internship = () => {
                         <button type='submit' className='w-full bg-pink-400 text-black  text-xs md:text-base p-2 rounded-md'>Click  here to share your payment  details</button>
                     </div>
                     <Link href={'/'} className='text-xs md:text-base'>
-                        Don't know your referral code? click her
-                    </Link>
+    Don&apos;t know your referral code? click here
+</Link>
+
                 </div>
                 </form>
             </div>
