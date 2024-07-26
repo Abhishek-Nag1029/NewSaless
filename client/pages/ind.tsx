@@ -13,20 +13,20 @@ const BMICalculator: React.FC = () => {
   const calculateBMI = () => {
     if (weight && height) {
       let bmiValue = 0;
-
+  
       if (unit === 'imperial') {
         // Calculate BMI in Imperial units (weight in lbs, height in inches)
-        bmiValue = (weight* 703 / (height * height)) ;
+        bmiValue = (weight * 703) / (height * height);
       } else {
         // Calculate BMI in Metric units (weight in kg, height in meters)
         const heightInMeters = height / 100; // Convert height to meters
         bmiValue = weight / (heightInMeters * heightInMeters);
       }
-
+  
       console.log(bmiValue);
-
-      setBMI(bmiValue.toFixed(2));
-
+  
+      setBMI(Number(bmiValue.toFixed(2))); // Convert string to number
+  
       // Determine BMI category
       if (bmiValue < 18.5) {
         setBMICategory('Underweight');
@@ -42,7 +42,7 @@ const BMICalculator: React.FC = () => {
       setBMICategory('-');
     }
   };
-
+  
   return (
     <div className="layout-column align-items-center justify-content-start bmi-calculator" data-testid="bmi-calculator">
       <div className="bmi-calculator-scale card w-200 pt-30 pb-8 mt-20 mb-15">
