@@ -15,7 +15,7 @@ import { useGetEmployeeQuery, useUpdateEmployeeEmailMutation } from '@/app/redux
 
 
 //Home Page
-const page = ({ params }) => {
+const Page = ({ params }) => {
     const [filter, setFilter] = useState('all');
     const [employees, setEmployees] = useState([])
     const [customers, setCustomers] = useState([])
@@ -490,4 +490,4 @@ const page = ({ params }) => {
 
 
 
-export default page
+export default Page
