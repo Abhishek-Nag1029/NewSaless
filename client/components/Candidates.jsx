@@ -4,7 +4,7 @@ import { useGetCandidateQuery } from "@/app/redux/api/CandidateApi";
 import { data } from "@/pages/linechart";
 import axios from "axios"
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+// import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect, useMemo } from "react"
@@ -12,6 +12,11 @@ import { toast } from 'react-toastify';
 
 
 const Candidates = () => {
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            import('bootstrap/dist/js/bootstrap.bundle.min.js');
+        }
+    }, []);
     const [allCandidate, setAllCandidate] = useState([])
     const [candidate, setCandidate] = useState([])
     const [modalData, setModalData] = useState()
@@ -226,7 +231,7 @@ const Candidates = () => {
     }
 
     useEffect(() => {
-        if (userId) {fetchAllCandidates
+        if (userId) {
             handelSendSingleMail()
         }
     }, [userId])
@@ -241,9 +246,9 @@ const Candidates = () => {
                 });
                 setAllCandidate(data);
                 setTotalPages(Math.ceil(data.length / currentPage)); // Update totalPages based on fetched data
-                setShouldRefetch(false); // Reset shouldRefetch to false
+                setShouldRefetch(undefined)
             } catch (error) {
-                if (error.response?.status === 401 || error.response?.status === 403) {
+                if (error.status === 401 || 403) {
                     setError(true)
                     router.push('/login')
                 } else {
@@ -253,10 +258,9 @@ const Candidates = () => {
                 setLoading(false)
             }
         };
-    
+
         fetchAllCandidates();
-    }, [params.id, shouldRefetch]);
-    
+    }, [shouldRefetch]);
 
     useEffect(() => {
         const filteredCandidates = statusFilter === "all" ? allCandidate : allCandidate.filter(item => item.status === statusFilter);
@@ -264,7 +268,6 @@ const Candidates = () => {
         setTotalPages(Math.ceil(filteredCandidates.length / currentPage));
         setPage(1); // Reset to the first page when status filter changes
     }, [statusFilter, allCandidate, currentPage]);
-    
 
     useEffect(() => {
         if (emailSent) {
@@ -318,31 +321,23 @@ const Candidates = () => {
                     </button>
 
                     <button
-    onClick={() => {
-        handleStatusFilter('shortlisted');
-        setMail(true);
-    }}
-    className="px-2 md:px-4 py-1 md:py-2 bg-blue-600 text-white rounded-2xl">
-    Shortlisted
-</button>
+                        onClick={() => ` ${handleStatusFilter('shortlisted')}, ${setMail(true)}`}
 
-<button
-    onClick={() => {
-        handleStatusFilter('discarded');
-        setMail(false);
-    }}
-    className="px-2 md:px-4 py-1 md:py-2 bg-red-600 text-white rounded-2xl">
-    Discarded
-</button>
+                        className="px-2 md:px-4 py-1 md:py-2 bg-blue-600 text-white rounded-2xl">
+                        Shortlisted
+                    </button>
 
-<button
-    onClick={() => {
-        handleStatusFilter('invited');
-        setMail(false);
-    }}
-    className="px-2 md:px-4 py-1 md:py-2 bg-green-600 text-white rounded-2xl">
-    Invited
-</button>
+                    <button
+                        onClick={() => `${handleStatusFilter('discarded')}, ${setMail(false)}`}
+                        className="px-2 md:px-4 py-1 md:py-2 bg-red-600 text-white rounded-2xl">
+                        Discarded
+                    </button>
+
+                    <button
+                        onClick={() => `${handleStatusFilter('invited')} , ${setMail(false)}`}
+                        className="px-2 md:px-4 py-1 md:py-2 bg-green-600 text-white rounded-2xl">
+                        Invited
+                    </button>
 
 
                 </div>
