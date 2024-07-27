@@ -226,7 +226,7 @@ const Candidates = () => {
     }
 
     useEffect(() => {
-        if (userId) {
+        if (userId) {fetchAllCandidates
             handelSendSingleMail()
         }
     }, [userId])
@@ -241,9 +241,9 @@ const Candidates = () => {
                 });
                 setAllCandidate(data);
                 setTotalPages(Math.ceil(data.length / currentPage)); // Update totalPages based on fetched data
-                setShouldRefetch(undefined)
+                setShouldRefetch(false); // Reset shouldRefetch to false
             } catch (error) {
-                if (error.status === 401 || 403) {
+                if (error.response?.status === 401 || error.response?.status === 403) {
                     setError(true)
                     router.push('/login')
                 } else {
@@ -253,9 +253,10 @@ const Candidates = () => {
                 setLoading(false)
             }
         };
-
+    
         fetchAllCandidates();
-    }, [shouldRefetch]);
+    }, [params.id, shouldRefetch]);
+    
 
     useEffect(() => {
         const filteredCandidates = statusFilter === "all" ? allCandidate : allCandidate.filter(item => item.status === statusFilter);
@@ -263,6 +264,7 @@ const Candidates = () => {
         setTotalPages(Math.ceil(filteredCandidates.length / currentPage));
         setPage(1); // Reset to the first page when status filter changes
     }, [statusFilter, allCandidate, currentPage]);
+    
 
     useEffect(() => {
         if (emailSent) {
@@ -316,23 +318,31 @@ const Candidates = () => {
                     </button>
 
                     <button
-                        onClick={() => ` ${handleStatusFilter('shortlisted')}, ${setMail(true)}`}
+    onClick={() => {
+        handleStatusFilter('shortlisted');
+        setMail(true);
+    }}
+    className="px-2 md:px-4 py-1 md:py-2 bg-blue-600 text-white rounded-2xl">
+    Shortlisted
+</button>
 
-                        className="px-2 md:px-4 py-1 md:py-2 bg-blue-600 text-white rounded-2xl">
-                        Shortlisted
-                    </button>
+<button
+    onClick={() => {
+        handleStatusFilter('discarded');
+        setMail(false);
+    }}
+    className="px-2 md:px-4 py-1 md:py-2 bg-red-600 text-white rounded-2xl">
+    Discarded
+</button>
 
-                    <button
-                        onClick={() => `${handleStatusFilter('discarded')}, ${setMail(false)}`}
-                        className="px-2 md:px-4 py-1 md:py-2 bg-red-600 text-white rounded-2xl">
-                        Discarded
-                    </button>
-
-                    <button
-                        onClick={() => `${handleStatusFilter('invited')} , ${setMail(false)}`}
-                        className="px-2 md:px-4 py-1 md:py-2 bg-green-600 text-white rounded-2xl">
-                        Invited
-                    </button>
+<button
+    onClick={() => {
+        handleStatusFilter('invited');
+        setMail(false);
+    }}
+    className="px-2 md:px-4 py-1 md:py-2 bg-green-600 text-white rounded-2xl">
+    Invited
+</button>
 
 
                 </div>
