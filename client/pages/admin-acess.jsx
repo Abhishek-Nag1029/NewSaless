@@ -23,7 +23,7 @@ const AdminAccess = () => {
         password: inpData.password,
       };
       const result = await axios.post(
-        "http://localhost:3000/api/master-admin/access",
+        "https://newsaless-2.onrender.com/api/master-admin/access",
         data
       );
       if (result.status === 200) {

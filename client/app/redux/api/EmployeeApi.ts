@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 
 export const employeeApi = createApi({
     reducerPath: "employeeApi",
-    baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/api/employee", credentials: 'include' }),
+    baseQuery: fetchBaseQuery({ baseUrl: "https://newsaless-2.onrender.com/api/employee", credentials: 'include' }),
     tagTypes: ["employee"],
     endpoints: (builder) => {
         return {

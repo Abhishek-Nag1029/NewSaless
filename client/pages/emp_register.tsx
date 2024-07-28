@@ -28,7 +28,7 @@ const Register: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:3000/api/employee/register', {
+      const response = await fetch('https://newsaless-2.onrender.com/api/employee/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
