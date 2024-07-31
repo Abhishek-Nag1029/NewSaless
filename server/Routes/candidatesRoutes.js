@@ -550,7 +550,7 @@ router.post('/sendemail/:id', async (req, res) => {
       subject: `Welcome to Bolt IO`,
       html: `
         <p>Please use the link below to submit your resume:</p>
-        <p><a href="http://localhost:3001/submission/${candidate.emailHash}">Resume Submission Link</a></p>
+        <p><a href="https://newsaless-4.onrender.com/submission/${candidate.emailHash}">Resume Submission Link</a></p>
         ` // Insert the unique link
     };
 
