@@ -7,7 +7,7 @@ const Employee = require('./models/employee');
 const server = createServer(app)
 const io = new Server(server, {
     cors: {
-        origin: ['http://localhost:3001','https://newsaless-4.onrender.com', 'http://localhost:5173', 'http://localhost:3002',],
+        origin: ['https://newsaless-4.onrender.com'],
         credentials: true
     }
 })

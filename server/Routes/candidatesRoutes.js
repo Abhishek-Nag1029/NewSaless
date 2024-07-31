@@ -493,7 +493,7 @@ router.post('/sendemail', async (req, res) => {
   // Helper function to create individual emails with a unique submission link
   const sendEmailWithUniqueLink = async (candidate) => {
     const emailHash = candidate.emailHash; // Assume this field is already populated in your Candidate document
-    const submissionLink = `http://localhost:3001/submission/${emailHash}`;
+    const submissionLink = `https://newsaless-4.onrender.com/submission/${emailHash}`;
 
     const mailOptions = {
       from: process.env.EMAIL,
