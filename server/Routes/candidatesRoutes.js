@@ -1,21 +1,20 @@
 const express = require("express");
 const router = express.Router();
-const { protected } = require('../middelwear/protected.js');
-const { validateAdminView } = require('../middelwear/adminView.js');
+const { protected } = require("../middelwear/protected.js");
+const { validateAdminView } = require("../middelwear/adminView.js");
 const Candidate = require("../models/candidate");
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
-const upload = require('../middelwear/multer.js');
-const Employee = require('../models/employee.js');
+const upload = require("../middelwear/multer.js");
+const Employee = require("../models/employee.js");
 const { title } = require("process");
 const Admin = require("../models/admin");
 const { error } = require("console");
-const crypto = require('crypto');
+const crypto = require("crypto");
 //## Get ---------------------------------------------------------------------------
 // All candidates
 
-
-// main Code 
+// main Code
 
 // router.get('/', protected, async (req, res) => {
 //   // router.get('/', async (req, res) => {
@@ -30,16 +29,16 @@ const crypto = require('crypto');
 //   }
 // });
 
-
-
-router.get('/admin-candidate/:id', validateAdminView, async (req, res) => {
-  const { id } = req.params
+router.get("/admin-candidate/:id", validateAdminView, async (req, res) => {
+  const { id } = req.params;
 
   try {
-    const admin = await Admin.findById(id)
+    const admin = await Admin.findById(id);
 
     if (!admin) {
-      return res.status(401).json({ message: "Unauthorized acess", error: error.message })
+      return res
+        .status(401)
+        .json({ message: "Unauthorized acess", error: error.message });
     }
     const candidates = await Candidate.find({});
 
@@ -47,19 +46,22 @@ router.get('/admin-candidate/:id', validateAdminView, async (req, res) => {
     res.status(200).json(candidates);
   } catch (error) {
     // If an error occurs, send back an error response
-    res.status(500).json({ message: 'Error fetching candidates', error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error fetching candidates", error: error.message });
   }
-})
+});
 
-router.get('/:id', validateAdminView, async (req, res) => {
-  const { id } = req.params
+router.get("/:id", validateAdminView, async (req, res) => {
+  const { id } = req.params;
   try {
     const candidates = await Candidate.findById(id);
 
-
     res.status(200).json(candidates);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching candidates', error: error });
+    res
+      .status(500)
+      .json({ message: "Error fetching candidates", error: error });
   }
 });
 
@@ -68,10 +70,21 @@ router.get('/:id', validateAdminView, async (req, res) => {
 // Add New candidates
 router.post("/", async (req, res) => {
   try {
-    const { firstName, lastName, email, phone, college, state, branch, degree, passingYear, message } = req.body;
+    const {
+      firstName,
+      lastName,
+      email,
+      phone,
+      college,
+      state,
+      branch,
+      degree,
+      passingYear,
+      message,
+    } = req.body;
 
     // Create a hash of the email
-    const emailHash = crypto.createHash('sha256').update(email).digest('hex');
+    const emailHash = crypto.createHash("sha256").update(email).digest("hex");
 
     const saveCandidate = await Candidate.create({
       emailHash: emailHash,
@@ -84,79 +97,89 @@ router.post("/", async (req, res) => {
       branch,
       degree,
       passingYear,
-      message
+      message,
     });
 
     return res.status(200).json({
       message: "Candidate added successfully",
-      saveCandidate
+      saveCandidate,
     });
-
   } catch (error) {
     return res.status(500).json({
       message: "Something went wrong while adding candidate",
-      error: error.message
+      error: error.message,
     });
   }
 });
 
 //  All candidates  by status
-router.post('/pending', async (req, res) => {
+router.post("/pending", async (req, res) => {
   try {
-    const candiate = await Candidate.find({ status: "pending" })
-    res.status(200).json({ message: "Fetched  pending candidates Success", candiate })
+    const candiate = await Candidate.find({ status: "pending" });
+    res
+      .status(200)
+      .json({ message: "Fetched  pending candidates Success", candiate });
   } catch (error) {
-    return res.status(500).json({ message: "Error fetching pending candidates", error: error })
+    return res
+      .status(500)
+      .json({ message: "Error fetching pending candidates", error: error });
   }
-})
+});
 
-router.post('/shortlisted', async (req, res) => {
+router.post("/shortlisted", async (req, res) => {
   try {
-    const candiate = await Candidate.find({ status: "shortlisted" })
-    res.status(200).json({ message: "Fetched  Shortlisted candidates Success", candiate })
+    const candiate = await Candidate.find({ status: "shortlisted" });
+    res
+      .status(200)
+      .json({ message: "Fetched  Shortlisted candidates Success", candiate });
   } catch (error) {
-    return res.status(500).json({ message: "Error fetching Shortlisted candidates", error: error })
+    return res
+      .status(500)
+      .json({ message: "Error fetching Shortlisted candidates", error: error });
   }
-})
+});
 
-router.post('/discarded', async (req, res) => {
+router.post("/discarded", async (req, res) => {
   try {
-    const candiate = await Candidate.find({ status: "discarded" })
-    res.status(200).json({ message: "Fetched  discarded candidates Success", candiate })
+    const candiate = await Candidate.find({ status: "discarded" });
+    res
+      .status(200)
+      .json({ message: "Fetched  discarded candidates Success", candiate });
   } catch (error) {
-    return res.status(500).json({ message: "Error fetching Shortlisted candidates", error: error })
+    return res
+      .status(500)
+      .json({ message: "Error fetching Shortlisted candidates", error: error });
   }
-})
+});
 
-//Send email as Helper Function 
+//Send email as Helper Function
 
 const sendEmail = async (subject, htmlContent) => {
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: "gmail",
     auth: {
       user: process.env.EMAIL,
-      pass: process.env.EMAIL_PASSWORD
-    }
+      pass: process.env.EMAIL_PASSWORD,
+    },
   });
 
   const mailOptions = {
     from: process.env.EMAIL,
     to: "borgaonkar1998@gmail.com",
     subject: subject,
-    html: htmlContent
+    html: htmlContent,
   };
 
   try {
     await transporter.sendMail(mailOptions);
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error("Error sending email:", error);
     throw error; // Rethrow the error for the caller to handle
   }
 };
 
-
-//Covert ==> Shortlisted 
-router.post('/shortlist/:id', async (req, res) => {
+//Covert ==> Shortlisted
+router.post("/shortlist/:id", async (req, res) => {
   const { id } = req.params;
   const { candidateId } = req.body;
 
@@ -174,37 +197,36 @@ router.post('/shortlist/:id', async (req, res) => {
       return res.status(401).json({ message: "Candidate not found" });
     }
 
-    if (candidate.status === 'shortlisted') {
+    if (candidate.status === "shortlisted") {
       return res.status(400).json({ message: "Candidate already shortlisted" });
     }
 
-    const adminName = admin.firstName + " " + admin.lastName;  // Added space between names for readability
+    const adminName = admin.firstName + " " + admin.lastName; // Added space between names for readability
     const updatedCandidate = await Candidate.findByIdAndUpdate(
       candidateId,
       {
         $set: {
-          status: 'shortlisted',   // Corrected the update object
-          adminAction: adminName
-        }
+          status: "shortlisted", // Corrected the update object
+          adminAction: adminName,
+        },
       },
       { new: true }
     );
 
-    const subject = 'Candidate Shortlisted';
+    const subject = "Candidate Shortlisted";
     const htmlContent = `<h2>Status Update</h2>
                          <p>The candidate <b>${candidate.firstName} ${candidate.lastName}</b>  has been shortlisted by <b>${adminName}</b>.</p>
                          <div>${updatedCandidate}</div>
                          `;
     await sendEmail(subject, htmlContent);
-    res.json({ message: 'Candidate shortlisted', candidate: updatedCandidate });
-
+    res.json({ message: "Candidate shortlisted", candidate: updatedCandidate });
   } catch (error) {
     console.error(error);
-    res.status(500).json(error);  // Send the error as a JSON
+    res.status(500).json(error); // Send the error as a JSON
   }
 });
 // Covert ==> Discarded
-router.post('/discard/:id', async (req, res) => {
+router.post("/discard/:id", async (req, res) => {
   const { id } = req.params;
   const { candidateId } = req.body;
 
@@ -222,7 +244,7 @@ router.post('/discard/:id', async (req, res) => {
       return res.status(401).json({ message: "Candidate not found" });
     }
 
-    if (candidate.status === 'discarded') {
+    if (candidate.status === "discarded") {
       return res.status(400).json({ message: "Candidate already discarded" });
     }
 
@@ -231,29 +253,28 @@ router.post('/discard/:id', async (req, res) => {
       candidateId,
       {
         $set: {
-          status: 'discarded',
-          adminAction: adminName
-        }
+          status: "discarded",
+          adminAction: adminName,
+        },
       },
       { new: true }
     );
 
-    const subject = 'Candidate discarded';
+    const subject = "Candidate discarded";
     const htmlContent = `<h2>Status Update</h2>
                          <p>The candidate ${candidate.firstName} ${candidate.lastName}  has been discarded by ${adminName}.</p>
                          <div>${updatedCandidate}</div>
                          `;
     await sendEmail(subject, htmlContent);
-    res.json({ message: 'Candidate discarded', candidate: updatedCandidate });
-
+    res.json({ message: "Candidate discarded", candidate: updatedCandidate });
   } catch (error) {
     console.error(error);
-    res.status(500).json(error);  // Send the error as a JSON
+    res.status(500).json(error); // Send the error as a JSON
   }
 });
 
 // Covert ==> Pending
-router.post('/pending/:id', async (req, res) => {
+router.post("/pending/:id", async (req, res) => {
   const { id } = req.params;
   const { candidateId } = req.body;
 
@@ -271,7 +292,7 @@ router.post('/pending/:id', async (req, res) => {
       return res.status(401).json({ message: "Candidate not found" });
     }
 
-    if (candidate.status === 'pending') {
+    if (candidate.status === "pending") {
       return res.status(400).json({ message: "Candidate already pending" });
     }
 
@@ -280,21 +301,20 @@ router.post('/pending/:id', async (req, res) => {
       candidateId,
       {
         $set: {
-          status: 'pending',
-          adminAction: adminName
-        }
+          status: "pending",
+          adminAction: adminName,
+        },
       },
       { new: true }
     );
 
-    const subject = 'Candidate status Pending';
+    const subject = "Candidate status Pending";
     const htmlContent = `<h2>Status Update</h2>
                          <p>The candidate ${candidate.firstName} ${candidate.lastName} status has been changed to  pending by ${adminName}.</p>
                          <div>${updatedCandidate}</div>
                          `;
     await sendEmail(subject, htmlContent);
-    res.json({ message: 'Candidate pending', candidate: updatedCandidate });
-
+    res.json({ message: "Candidate pending", candidate: updatedCandidate });
   } catch (error) {
     console.error(error);
     res.status(500).json(error);
@@ -302,7 +322,7 @@ router.post('/pending/:id', async (req, res) => {
 });
 
 // Covert ==> invited
-router.post('/invited/:id', async (req, res) => {
+router.post("/invited/:id", async (req, res) => {
   const { id } = req.params;
   const { candidateId } = req.body;
 
@@ -320,7 +340,7 @@ router.post('/invited/:id', async (req, res) => {
       return res.status(401).json({ message: "Candidate not found" });
     }
 
-    if (candidate.status === 'invited') {
+    if (candidate.status === "invited") {
       return res.status(400).json({ message: "Candidate already invited" });
     }
 
@@ -329,21 +349,20 @@ router.post('/invited/:id', async (req, res) => {
       candidateId,
       {
         $set: {
-          status: 'invited',
-          adminAction: adminName
-        }
+          status: "invited",
+          adminAction: adminName,
+        },
       },
       { new: true }
     );
 
-    const subject = 'Candidate status invited';
+    const subject = "Candidate status invited";
     const htmlContent = `<h2>Status Update</h2>
                          <p>The candidate ${candidate.firstName} ${candidate.lastName} status has been changed to  invited by ${adminName}.</p>
                          <div>${updatedCandidate}</div>
                          `;
     await sendEmail(subject, htmlContent);
-    res.json({ message: 'Candidate invited', candidate: updatedCandidate });
-
+    res.json({ message: "Candidate invited", candidate: updatedCandidate });
   } catch (error) {
     console.error(error);
     res.status(500).json(error);
@@ -351,7 +370,7 @@ router.post('/invited/:id', async (req, res) => {
 });
 
 // Covert ==> employee
-router.post('/employee/:id', async (req, res) => {
+router.post("/employee/:id", async (req, res) => {
   const { id } = req.params;
   const { candidateId } = req.body;
   try {
@@ -366,7 +385,7 @@ router.post('/employee/:id', async (req, res) => {
       return res.status(404).json({ message: "Candidate did not found" });
     }
 
-    if (candidate.status === 'employee') {
+    if (candidate.status === "employee") {
       return res.status(400).json({ message: "Candidate is already employee" });
     }
 
@@ -375,14 +394,14 @@ router.post('/employee/:id', async (req, res) => {
       candidateId,
       {
         $set: {
-          status: 'employee',
-          adminAction: adminName
-        }
+          status: "employee",
+          adminAction: adminName,
+        },
       },
       { new: true }
     );
 
-    const subject = 'Candidate Employee';
+    const subject = "Candidate Employee";
     const htmlContent = `<h2>Status Update</h2>
                          <p>The candidate ${candidate.firstName} ${candidate.lastName} status has been changed to  employee by ${adminName}.</p>
                          <div>${updatedCandidate}</div>
@@ -392,13 +411,13 @@ router.post('/employee/:id', async (req, res) => {
     // Candidate status updated and now creating an Employee  👇
 
     // The Candidate would need a password and referral ID for registration ⤵
-    const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const numbers = '0123456789';
-    const specialChars = '@_';
+    const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const numbers = "0123456789";
+    const specialChars = "@_";
     const allChars = uppercase + numbers + specialChars;
 
-    let password = '';
-    let referralID = '';
+    let password = "";
+    let referralID = "";
 
     // Construct password with mandatory characters
     password += uppercase[Math.floor(Math.random() * uppercase.length)];
@@ -414,16 +433,22 @@ router.post('/employee/:id', async (req, res) => {
     while (password.length < 6) {
       password += allChars[Math.floor(Math.random() * allChars.length)];
     }
-    password = password.split('').sort(() => 0.5 - Math.random()).join('');
+    password = password
+      .split("")
+      .sort(() => 0.5 - Math.random())
+      .join("");
 
     while (referralID.length < 6) {
       referralID += allChars[Math.floor(Math.random() * allChars.length)];
     }
-    referralID = referralID.split('').sort(() => 0.5 - Math.random()).join('');
+    referralID = referralID
+      .split("")
+      .sort(() => 0.5 - Math.random())
+      .join("");
 
-    const employee = await Employee.findOne({ email: updatedCandidate.email })
+    const employee = await Employee.findOne({ email: updatedCandidate.email });
     if (employee) {
-      return res.status(401).json({ message: "Employee already exist" })
+      return res.status(401).json({ message: "Employee already exist" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -434,15 +459,15 @@ router.post('/employee/:id', async (req, res) => {
       email: updatedCandidate.email,
       password: hashedPassword,
       referalID: referralID,
-      id: candidateId
-    })
+      id: candidateId,
+    });
 
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      service: "gmail",
       auth: {
         user: process.env.EMAIL,
-        pass: process.env.EMAIL_PASSWORD
-      }
+        pass: process.env.EMAIL_PASSWORD,
+      },
     });
 
     // Define the email options
@@ -458,36 +483,35 @@ router.post('/employee/:id', async (req, res) => {
         <p>Password : ${password}</p>
         <p>referralID : ${referralID}</p>
 
-        `
+        `,
     };
 
     // Send the email
     const emailResponse = await transporter.sendMail(mailOptions);
 
-
     res.json({ employee: createEmployeeAction, candidate: updatedCandidate });
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.message });
   }
 });
 
-
 // Send mail to all shortlisted candidates
-router.post('/sendemail', async (req, res) => {
+router.post("/sendemail", async (req, res) => {
   const candidates = await Candidate.find({ status: "shortlisted" });
 
   if (!candidates.length) {
-    return res.status(400).json({ message: "No Candidates found for sending emails" });
+    return res
+      .status(400)
+      .json({ message: "No Candidates found for sending emails" });
   }
 
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: "gmail",
     auth: {
       user: process.env.EMAIL,
-      pass: process.env.EMAIL_PASSWORD
-    }
+      pass: process.env.EMAIL_PASSWORD,
+    },
   });
 
   // Helper function to create individual emails with a unique submission link
@@ -499,7 +523,7 @@ router.post('/sendemail', async (req, res) => {
       from: process.env.EMAIL,
       to: candidate.email, // Send to the individual candidate's email
       subject: `Welcome to Bolt IO`,
-      html: `<p>Please use the link below to submit your resume:</p><p>${submissionLink}</p>` // Insert the unique link
+      html: `<p>Please use the link below to submit your resume:</p><p>${submissionLink}</p>`, // Insert the unique link
     };
 
     // Send email
@@ -507,19 +531,24 @@ router.post('/sendemail', async (req, res) => {
   };
 
   // Send emails with unique links
-  const sendEmailPromises = candidates.map(candidate => sendEmailWithUniqueLink(candidate));
+  const sendEmailPromises = candidates.map((candidate) =>
+    sendEmailWithUniqueLink(candidate)
+  );
 
   Promise.all(sendEmailPromises)
     .then(() => {
-      return res.status(200).json({ message: 'All emails sent successfully.' });
+      return res.status(200).json({ message: "All emails sent successfully." });
     })
-    .catch(error => {
-      console.error('Error during email sending:', error);
-      return res.status(500).json({ message: 'There was an error sending some emails.', error: error.message });
+    .catch((error) => {
+      console.error("Error during email sending:", error);
+      return res.status(500).json({
+        message: "There was an error sending some emails.",
+        error: error.message,
+      });
     });
 });
 
-router.post('/sendemail/:id', async (req, res) => {
+router.post("/sendemail/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -530,17 +559,17 @@ router.post('/sendemail/:id', async (req, res) => {
     }
 
     // Check if the candidate was already shortlisted
-    if (candidate.status === 'invited') {
+    if (candidate.status === "invited") {
       return res.status(400).json({ message: "Candidate already shortlisted" });
     }
 
     // Configure the transporter for nodemailer
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      service: "gmail",
       auth: {
         user: process.env.EMAIL,
-        pass: process.env.EMAIL_PASSWORD
-      }
+        pass: process.env.EMAIL_PASSWORD,
+      },
     });
 
     // Define the email options
@@ -551,26 +580,34 @@ router.post('/sendemail/:id', async (req, res) => {
       html: `
         <p>Please use the link below to submit your resume:</p>
         <p><a href="https://newsaless-4.onrender.com/submission/${candidate.emailHash}">Resume Submission Link</a></p>
-        ` // Insert the unique link
+        `, // Insert the unique link
     };
 
     // Send the email
     const emailResponse = await transporter.sendMail(mailOptions);
-    console.log('Email sent: ', emailResponse);
+    console.log("Email sent: ", emailResponse);
 
     // Update candidate status to 'shortlisted' after sending the email
-    const updatedCandidate = await Candidate.findByIdAndUpdate(id, { status: 'invited' }, { new: true });
+    const updatedCandidate = await Candidate.findByIdAndUpdate(
+      id,
+      { status: "invited" },
+      { new: true }
+    );
 
-    res.status(200).json({ message: "Email sent successfully", updatedCandidate });
-
+    res
+      .status(200)
+      .json({ message: "Email sent successfully", updatedCandidate });
   } catch (error) {
-    console.error('Error sending email: ', error);
-    res.status(500).json({ message: "Something went wrong with the request", error: error.message });
+    console.error("Error sending email: ", error);
+    res.status(500).json({
+      message: "Something went wrong with the request",
+      error: error.message,
+    });
   }
 });
 
 // Single candidate shortlisted mail
-router.post('/submission/:emailHash', async (req, res) => {
+router.post("/submission/:emailHash", async (req, res) => {
   const { emailHash } = req.params;
   const { email, resumeLink } = req.body;
 
@@ -578,37 +615,48 @@ router.post('/submission/:emailHash', async (req, res) => {
     const candidate = await Candidate.findOne({ emailHash });
 
     if (!candidate) {
-      res.status(404).json({ message: 'No candidate found with this identifier.' });
+      res
+        .status(404)
+        .json({ message: "No candidate found with this identifier." });
       return;
     }
 
     if (candidate.email !== email) {
-      res.status(400).json({ message: 'The provided email does not match our records.' });
+      res
+        .status(400)
+        .json({ message: "The provided email does not match our records." });
       return;
     }
 
     candidate.resume = resumeLink;
     await candidate.save();
 
-    res.status(200).json({ message: 'Resume submitted successfully.' });
+    res.status(200).json({ message: "Resume submitted successfully." });
   } catch (error) {
-    res.status(500).json({ message: 'An error occurred while processing your submission.', error: error.message });
+    res.status(500).json({
+      message: "An error occurred while processing your submission.",
+      error: error.message,
+    });
   }
 });
 
-// Candidate internship 
+// Candidate internship
 router.post("/check/referral-code", async (req, res) => {
-  const { referalID } = req.body
+  const { referalID } = req.body;
   try {
-    const checkRefId = await Employee.findOne({ referalID: referalID })
+    const checkRefId = await Employee.findOne({ referalID: referalID });
     if (!checkRefId) {
-      return res.status(401).json({ message: "referalID not found", error: error.message })
+      return res
+        .status(401)
+        .json({ message: "referalID not found", error: error.message });
     }
-    return res.status(200).json(checkRefId)
+    return res.status(200).json(checkRefId);
   } catch (error) {
-    return res.status(500).json({ message: "Something went wrong", error: error.message })
+    return res
+      .status(500)
+      .json({ message: "Something went wrong", error: error.message });
   }
-})
+});
 
 // router.post('/add/bank-details', async (req, res) => {
 //   const { email, bankName, accountNumber, payeeName, ifscCode } = req.body;
@@ -632,11 +680,9 @@ router.post("/check/referral-code", async (req, res) => {
 
 //     const hashedIfscCode = await bcrypt.hash(ifscCode, 10);
 
-
 //     console.log(hashedBankName,
 //       hashedAccountNumber,
 //       hashedIfscCode);
-
 
 //     const update = {
 //       bankName: hashedBankName,
@@ -645,7 +691,6 @@ router.post("/check/referral-code", async (req, res) => {
 //       ifscCode: hashedIfscCode
 //     };
 //     const result = await Candidate.findByIdAndUpdate(candidate._id, update, { new: true });
-
 
 //     if (result) {
 //       // Setup nodemailer transport inside the if block to avoid unnecessary setup for failure cases
@@ -693,15 +738,14 @@ router.post("/check/referral-code", async (req, res) => {
 //   }
 // });
 
-
 const encryptText = (text) => {
-  const cipher = crypto.createCipher('aes-256-ctr', process.env.HASH_SECRET);
-  let encrypted = cipher.update(text, 'utf8', 'hex');
-  encrypted += cipher.final('hex');
+  const cipher = crypto.createCipher("aes-256-ctr", process.env.HASH_SECRET);
+  let encrypted = cipher.update(text, "utf8", "hex");
+  encrypted += cipher.final("hex");
   return encrypted;
 };
 
-router.post('/add/bank-details', async (req, res) => {
+router.post("/add/bank-details", async (req, res) => {
   const { email, bankName, accountNumber, payeeName, ifscCode } = req.body;
 
   // Encrypt the bank details
@@ -710,7 +754,13 @@ router.post('/add/bank-details', async (req, res) => {
   const encryptedIfscCode = encryptText(ifscCode);
 
   try {
-    if (!email || !encryptedBankName || !encryptedAccountNumber || !payeeName || !encryptedIfscCode) {
+    if (
+      !email ||
+      !encryptedBankName ||
+      !encryptedAccountNumber ||
+      !payeeName ||
+      !encryptedIfscCode
+    ) {
       return res.status(400).json({ message: "Please enter all fields" });
     }
 
@@ -720,30 +770,41 @@ router.post('/add/bank-details', async (req, res) => {
       return res.status(404).json({ message: "Email not found" });
     }
 
-    if (candidate.bankName || candidate.accountNumber || candidate.payeeName || candidate.ifscCode) {
-      return res.status(409).json({ message: "Bank details have already been submitted. Please contact your HR." });
+    if (
+      candidate.bankName ||
+      candidate.accountNumber ||
+      candidate.payeeName ||
+      candidate.ifscCode
+    ) {
+      return res.status(409).json({
+        message:
+          "Bank details have already been submitted. Please contact your HR.",
+      });
     }
 
     const update = {
       bankName: encryptedBankName,
       accountNumber: encryptedAccountNumber,
       payeeName,
-      ifscCode: encryptedIfscCode
+      ifscCode: encryptedIfscCode,
     };
 
-    const result = await Candidate.findByIdAndUpdate(candidate._id, update, { new: true });
+    const result = await Candidate.findByIdAndUpdate(candidate._id, update, {
+      new: true,
+    });
 
     if (result) {
       const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        service: "gmail",
         auth: {
           user: process.env.EMAIL,
-          pass: process.env.EMAIL_PASSWORD
-        }
+          pass: process.env.EMAIL_PASSWORD,
+        },
       });
 
       // Email text should NOT contain sensitive bank details, even in encrypted form
-      const emailText = `Dear ${result.firstName} ${result.lastName},\n\n` +
+      const emailText =
+        `Dear ${result.firstName} ${result.lastName},\n\n` +
         `Your bank details have been updated successfully.\n\n` +
         `Regards,\n` +
         `The HR Team`;
@@ -751,25 +812,35 @@ router.post('/add/bank-details', async (req, res) => {
       const mailOptions = {
         from: process.env.EMAIL,
         to: result.email,
-        subject: 'Bank Details Updated',
-        text: emailText
+        subject: "Bank Details Updated",
+        text: emailText,
       };
 
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-          console.error('Error during email sending:', error);
-          return res.status(500).json({ message: 'There was an error sending the email.', error: error.message });
+          console.error("Error during email sending:", error);
+          return res.status(500).json({
+            message: "There was an error sending the email.",
+            error: error.message,
+          });
         }
         // Email has been sent, respond to the client
-        return res.status(200).json({ message: 'Bank details updated and email sent successfully', result });
+        return res.status(200).json({
+          message: "Bank details updated and email sent successfully",
+          result,
+        });
       });
     } else {
-      return res.status(404).json({ message: "Update failed, candidate not found." });
+      return res
+        .status(404)
+        .json({ message: "Update failed, candidate not found." });
     }
   } catch (error) {
-    console.error('Error during bank details update:', error);
-    return res.status(500).json({ message: "Something went wrong", error: error.message });
+    console.error("Error during bank details update:", error);
+    return res
+      .status(500)
+      .json({ message: "Something went wrong", error: error.message });
   }
 });
 
-module.exports = router
+module.exports = router;

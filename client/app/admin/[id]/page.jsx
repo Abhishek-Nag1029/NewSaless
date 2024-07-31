@@ -38,7 +38,7 @@ const Page = ({ params }) => {
 
   const search = useSearchParams();
   const router = useRouter();
-  console.log("params.id", params.id);
+  // console.log("params.id", params.id);
   const { data, error, isFetching, isError, status } = useGetAdminQuery(
     params.id
   );
