@@ -45,6 +45,7 @@ router.get('/:id', validateAdmin, async (req, res) => {
   const { id } = req.params;
   try {
     const admin = await Admin.findById(id);
+    console.log("admin ",admin);
 
     if (!admin) {
       return res.status(404).json({ message: 'admin not found' });
@@ -67,6 +68,7 @@ router.post("/login", async (req, res) => {
     let admin;
     // Search for the employee by email or referalID
     admin = await Admin.findOne({ email })
+    console.log(admin);
     if (!admin) {
       // if admin's Email didn't match find by referalID
       admin = await Admin.findOne({ adminId: email })
@@ -79,6 +81,7 @@ router.post("/login", async (req, res) => {
     if (!passwordMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
+    
 
     // Create a JWT
     // const token = jwt.sign({ adminId: admin._id }, process.env.JWT_KEY, {

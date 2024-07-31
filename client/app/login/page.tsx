@@ -8,8 +8,8 @@ import Head from 'next/head';
 import { useAdminLoginMutation, useEmployeeLoginMutation } from '@/app/redux/api/loginApi';
 import Loading from '@/components/Loading';
 interface FormData {
-    email: String,
-    password: String,
+    email: string,
+    password: string,
 }
 
 const Login: React.FC = () => {
@@ -30,9 +30,11 @@ const Login: React.FC = () => {
     const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
         event.preventDefault();
 
+
         if (active === 'admin') {
             try {
                 const resultAction = await adminLogin(formData).unwrap();
+                console.log(resultAction);
                 const { _id } = resultAction.admin;
                 router.push(`/admin/${_id}`);
             } catch (error: any) {

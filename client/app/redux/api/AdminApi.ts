@@ -17,7 +17,7 @@ export const adminApi = createApi({
             }),
             updateAdminEmail: builder.mutation({
                 query: ({ id, ...patch }) => ({
-                    url: `/updateEmail/${id}`,
+                    url: `/updateEmail/${id}`,  
                     method: 'PUT',
                     body: patch,
                 }),
