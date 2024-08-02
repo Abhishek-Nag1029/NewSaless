@@ -17,6 +17,7 @@ const employee = require("../models/employee.js");
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   // Search for the employee by email or referalID
+  console.log(password);
 
   try {
     let employee;
